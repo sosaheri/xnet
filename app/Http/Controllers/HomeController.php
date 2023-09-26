@@ -24,6 +24,8 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $this->authorize('view-notes');
+
         return view('home');
     }
 
