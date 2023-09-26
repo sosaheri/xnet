@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\Department;
 use App\Models\Role;
 use App\Models\User;
 use App\Http\Controllers\Controller;
@@ -72,7 +73,8 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'role_id' => Role::ROLE_EMPLEADO
+            'role_id' => Role::ROLE_EMPLEADO,
+            'department_id' => Department::DEPT_ATC,
             ]
         );
     }
