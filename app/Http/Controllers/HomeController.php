@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Auth;
+use App\Models\Note;
+use App\Models\Role;
+use App\Models\Department;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -25,7 +28,14 @@ class HomeController extends Controller
     public function index()
     {
         $this->authorize('view-notes');
-        return view('home');
+
+        if(Auth::user()->department->id == Department::DEPT_ATC || Auth::user()->role->id == Role::ROLE_JEFE ) {
+            $notes = Note::all();
+        } else {
+            $notes = Note::where('department_id', Auth::user()->department->id)->get();
+        }
+
+        return view('home', compact('notes'));
     }
 
 
