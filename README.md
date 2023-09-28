@@ -1,3 +1,20 @@
+## PROCESO DE INSTALACION
+
+clone proyecto en su servidor o equipo local, ejecute los siguientes comandos
+
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+php artisan serve
+
+npm install && npm run dev
+php artisan serve
+
+## CREDENCIALES DE PRUEBA
+
+  tipo de usuario   email             contraseña
+- equis             user@xnet.com     password
 
 ## PRUEBA DESARROLLO PHP, JS Y MYSQL
 
