@@ -13,8 +13,14 @@ php artisan serve
 
 ## CREDENCIALES DE PRUEBA
 
-  tipo de usuario   email             contraseña
-- equis             user@xnet.com     password
+  tipo de usuario         email                       contraseña
+
+- empleado ATC            user@xnet.com               password
+- jefe ATC                jefeatc@xnet.com            password
+- responsable ATC         respatc@xnet.com            password
+- empleado COMERCIAL      user2@xnet.com              password
+- jefe COMERCIAL          jefecomercial@xnet.com      password
+- responsable COMERCIAL   respcomercial@xnet.com      password
 
 ## PRUEBA DESARROLLO PHP, JS Y MYSQL
 
