@@ -9,8 +9,9 @@
                 <div class="card-header">{{ __('Editar nota') }}</div>
 
                 <div class="card-body">
-                    <form action="{{ route('notes.store') }}" method="POST">
+                    <form action="{{ route('notes.update', $note->id) }}" method="POST">
                         @csrf
+                        @method('PUT')
                         
                         @if (Auth::user()->id == $note->user_id ||
                         (       Auth::user()->role->id == \App\Models\Role::ROLE_JEFE ||
@@ -63,6 +64,11 @@
                                 <strong>{{ $message }}</strong>
                             </span>
                             @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="InputPhone">Última actualización: </label>
+                            {{  $note->saved_at }}
                         </div>
 
                         <button type="submit" class="btn btn-primary mt-2">Enviar</button>

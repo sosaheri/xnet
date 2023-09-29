@@ -22,5 +22,6 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/notes/create', [App\Http\Controllers\NoteController::class, 'create'])->name('notes.create');
 Route::get('/notes/{id}', [App\Http\Controllers\NoteController::class, 'edit'])->name('notes.edit');
 Route::post('/notes', [App\Http\Controllers\NoteController::class, 'store'])->name('notes.store');
+Route::put('/notes/{id}', [App\Http\Controllers\NoteController::class, 'update'])->name('notes.update');
 Route::delete('notes/{id}', [App\Http\Controllers\NoteController::class, 'destroy'])->name('notes.destroy');
-
+Route::post('notes/{id}', [App\Http\Controllers\NoteController::class, 'reactivate'])->name('notes.reactivate');

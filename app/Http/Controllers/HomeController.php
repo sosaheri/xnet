@@ -25,17 +25,32 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
         $this->authorize('view-notes');
 
         if (Auth::user()->department->id == Department::DEPT_ATC || Auth::user()->role->id == Role::ROLE_JEFE ) {
-            $notes = Note::all();
+
+            $search = $request->input('search');
+
+            if ($search) {
+                $notes = Note::where(
+                    function ($query) use ($search) {
+                        $query->where('customer_name', 'like', '%' . $search . '%')
+                            ->orWhere('description', 'like', '%' . $search . '%');
+                    }
+                )->get();
+
+            } else { 
+                $notes = Note::all();
+            }
         } else {
             $notes = Note::where('department_id', Auth::user()->department->id)->get();
         }
 
-        return view('home', compact('notes'));
+        
+
+        return view('home', compact('notes', 'search'));
     }
 
 

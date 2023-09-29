@@ -16,7 +16,15 @@
                     @endif
                 </div>
 
+                
+
                 <div class="card-body">
+                    <form action="{{ route('home') }}" method="get">
+                        <input type="text" name="search" placeholder="Buscar...">
+                        <button type="submit">Buscar</button>
+                        <button id="btn-limpiar" type="reset">Limpiar</button>
+                    </form>
+
                     <table class="table">
                         <thead>
                             <tr>
@@ -32,63 +40,69 @@
                         </thead>
                         <tbody>
                             @foreach ($notes as $item)
-                            
-                            @php
-                            $cssClass = '';
-                            if ($item->deleted_at) {
-                            $cssClass = 'bg-danger';
-                            } elseif ($item->status == 'pending') {
-                            $cssClass = 'bg-primary';
-                            } elseif ($item->status == 'process') {
-                            $cssClass = 'bg-warning';
-                            } elseif ($item->status == 'finish') {
-                            $cssClass = 'bg-success';
-                            }
-                            @endphp
+                                @php
+                                $cssClass = '';
+                                if ($item->deleted_at) {
+                                $cssClass = 'bg-danger';
+                                } elseif ($item->status == 'pending') {
+                                $cssClass = 'bg-primary';
+                                } elseif ($item->status == 'process') {
+                                $cssClass = 'bg-warning';
+                                } elseif ($item->status == 'finish') {
+                                $cssClass = 'bg-success';
+                                }
+                                @endphp
 
-                            <tr>
-                                <th class="{{ $cssClass }}" scope="row">
-                                    {{ $item->id }} @if($item->reactivated_at) <i class="fa fa-edit"></i> @endif
-                                </th>
-                                <td  class="{{ $cssClass }}"  >{{ $item->user->name }}</td>
-                                <td  class="{{ $cssClass }}"  >{{ $item->customer_name }}</td>
-                                <td  class="{{ $cssClass }}"  >{{ $item->customer_company }}</td>
-                                <td  class="{{ $cssClass }}"  >{{ $item->customer_phone }}</td>
-                                <td  class="{{ $cssClass }}"  >{{ $item->status }}</td>
-                                <td  class="{{ $cssClass }}"  >{{  substr($item->description, 0, 10) }}...</td>
-                                <td  >
-                                    <div class="btn-group btn-group-sm" role="group" aria-label="...">
-                                        {{-- <button type="button" class="btn btn-secondary" @if($item->deleted_at) hidden @endif>Actualizar</button> --}}
-                                        <a href="{{ route('notes.edit', $item->id) }}" class="btn btn-secondary" @if($item->deleted_at) hidden @endif>
-                                            Actualizar
-                                        </a>
-                                        <form action="{{ route('notes.destroy', $item->id) }}" method="post">
-                                            @csrf
-                                            @method('DELETE')
+                                <tr>
+                                    <th class="{{ $cssClass }}" scope="row">
+                                        {{ $item->id }} @if($item->observation) <i class="fa fa-edit"></i> @endif
+                                    </th>
+                                    <td  class="{{ $cssClass }}"  >{{ $item->user->name }}</td>
+                                    <td  class="{{ $cssClass }}"  >{{ $item->customer_name }}</td>
+                                    <td  class="{{ $cssClass }}"  >{{ $item->customer_company }}</td>
+                                    <td  class="{{ $cssClass }}"  >{{ $item->customer_phone }}</td>
+                                    <td  class="{{ $cssClass }}"  >{{ $item->status }}</td>
+                                    <td  class="{{ $cssClass }}"  >{{  substr($item->description, 0, 10) }}...</td>
+                                    <td  >
+                                        <div class="btn-group btn-group-sm" role="group" aria-label="...">
+                                            <a href="{{ route('notes.edit', $item->id) }}" class="btn btn-secondary" @if($item->deleted_at) hidden @endif>
+                                                Actualizar
+                                            </a>
+                                            <form action="{{ route('notes.destroy', $item->id) }}" method="post">
+                                                @csrf
+                                                @method('DELETE')
 
-{{-- Auth::user()->department->id != \App\Models\Department::DEPT_ATC || --}}
+                                                <button type="submit" class="btn btn-danger" 
+                                                    @if (
+                                                    Auth::user()->role->id != \App\Models\Role::ROLE_JEFE ||
+                                                    Auth::user()->role->id != \App\Models\Role::ROLE_RESPONSABLE
+                                                    )
+                                                    disabled
+                                                    @endif
 
-                                            <button type="submit" class="btn btn-danger" 
-                                                @if (
-                                                Auth::user()->role->id != \App\Models\Role::ROLE_JEFE ||
-                                                Auth::user()->role->id != \App\Models\Role::ROLE_RESPONSABLE
-                                                )
-                                                disabled
+                                                    @if($item->deleted_at)
+                                                    hidden
+                                                    @endif
+                                                >
+                                                    Borrar
+                                                </button>
+                                            </form>
+
+                                            <form action="{{ route('notes.reactivate', $item->id) }}" method="post">
+                                                @csrf
+
+                                                <button id="btn-activar" class="btn btn-success" 
+                                                @if ( Auth::user()->role->id != \App\Models\Role::ROLE_RESPONSABLE && !$item->deleted_at )
+                                                        hidden
                                                 @endif
+                                                
+                                                >Activar</button>
 
-                                                @if($item->deleted_at)
-                                                hidden
-                                                @endif
-                                            >
-                                                Borrar
-                                            </button>
-                                        </form>
-
-
-                                        <button type="button" class="btn btn-success">Activar</button>
-                                    </div>
-                                </td>
-                            </tr>
+                                                
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>
@@ -97,4 +111,13 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+
+        $("#btn-limpiar").click(function() {
+            window.location.href = "/home";            
+        });
+    });
+</script>
 @endsection
