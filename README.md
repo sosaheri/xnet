@@ -11,6 +11,8 @@ php artisan serve
 npm install && npm run dev
 php artisan serve
 
+Todo el historico de creacion de la bd se encuentra en la migraciones, de igual forma se anexa sql
+
 ## CREDENCIALES DE PRUEBA
 
   tipo de usuario         email                       contraseña
